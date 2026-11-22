@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Aviso, Carregar, Etiqueta, Etiquetas, Externo, Nota, Seccao, Texto } from '@/components/base';
 import { Fila, Logos } from '@/components/cartoes';
+import { Galeria } from '@/components/galeria';
 import { Temporadas } from '@/components/temporadas';
 import { img, useTmdb } from '@/lib/api';
 import { agruparEquipa, classificacao, limita, serieComoFilme } from '@/lib/dados';
@@ -130,15 +131,7 @@ export default function Titulo() {
       <Fila titulo={t('ui.elenco')} media="person" itens={actores.slice(0, 12)} legenda={(p) => p.character} verMais={elenco} />
       <Fila titulo={t('ui.equipa_tecnica')} media="person" itens={tecnicos.slice(0, 12)} legenda={(p) => p.job} verMais={elenco} />
 
-      {f.images.backdrops.length > 0 && (
-        <Seccao titulo={t('ui.galeria')}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }}>
-            {f.images.backdrops.slice(0, 12).map((i: any) => (
-              <Image key={i.file_path} source={img(i.file_path, 'w780')} style={{ width: 280, aspectRatio: 16 / 9, borderRadius: 10, backgroundColor: c.superficie }} contentFit="cover" />
-            ))}
-          </ScrollView>
-        </Seccao>
-      )}
+      <Galeria imagens={f.images.backdrops} />
 
       {f.belongs_to_collection && (
         <Seccao titulo={t('ui.coleccao')}>

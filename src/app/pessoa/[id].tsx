@@ -3,8 +3,9 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
-import { Aviso, Carregar, Externo, Seccao, Texto } from '@/components/base';
+import { Aviso, Carregar, Externo, Texto } from '@/components/base';
 import { Fila } from '@/components/cartoes';
+import { Galeria } from '@/components/galeria';
 import { img, useTmdb } from '@/lib/api';
 import { agruparEquipa } from '@/lib/dados';
 import { lingua, t } from '@/lib/i18n';
@@ -53,15 +54,7 @@ export default function Pessoa() {
       />
       <Fila titulo={t('ui.part_series')} media="tv" itens={porPopularidade(agruparEquipa(a.tv_credits?.cast || [], 'character'))} legenda={(f) => f.character} />
       <Fila titulo={t('ui.part_equipa')} media="movie" itens={porPopularidade(agruparEquipa(a.credits.crew))} legenda={(f) => f.job} />
-      {a.images?.profiles.length > 0 && (
-        <Seccao titulo={t('ui.galeria')}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }}>
-            {a.images.profiles.slice(0, 12).map((i: any) => (
-              <Image key={i.file_path} source={img(i.file_path)} style={{ width: 150, aspectRatio: 2 / 3, borderRadius: 10, backgroundColor: c.superficie }} contentFit="cover" />
-            ))}
-          </ScrollView>
-        </Seccao>
-      )}
+      <Galeria retrato imagens={a.images?.profiles || []} />
     </ScrollView>
   );
 }
