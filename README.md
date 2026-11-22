@@ -1,56 +1,22 @@
-# Welcome to your Expo app 👋
+# Muver (app)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+App móvel do [Muver](https://muver.moserjose.com/) em React Native + Expo (SDK 58, Expo Router), com os dados da [TMDB](https://www.themoviedb.org/).
 
-## Get started
+## Correr
 
-1. Install dependencies
+1. `npm install`
+2. Copie `.env.example` para `.env.local` e ponha a chave da TMDB em `EXPO_PUBLIC_TMDB_KEY`
+3. `npx expo run:ios` (ou `npx expo run:android`) para compilar e instalar a development build — só é preciso repetir quando mudam dependências nativas ou o `app.json`
+4. No dia-a-dia, `npx expo start` e abra a app Muver instalada (a development build)
 
-   ```bash
-   npm install
-   ```
+As pastas `ios/` e `android/` são geradas pelo Expo a partir do `app.json` e não vão para o git.
 
-2. Start the app
+`npm test` corre os testes (Jest): dados, traduções, tema, pedidos à TMDB e os ecrãs de Pesquisa e Definições; `npm run typecheck` verifica os tipos.
 
-   ```bash
-   npx expo start
-   ```
+## Estrutura
 
-In the output, you'll find options to open the app in a
+- `src/app` — ecrãs (abas Muver, Filmes, Séries, Pesquisa, Definições; detalhe de título e pessoa; actores; elenco; listas; descobrir)
+- `src/components` — cartões, filas, grelha, temporadas
+- `src/lib` — pedidos à TMDB, traduções (pt/en, segue o idioma do telemóvel), tema
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
-
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Este produto usa a API da TMDB, mas não é endossado nem certificado pela TMDB.
