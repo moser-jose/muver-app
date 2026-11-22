@@ -45,11 +45,12 @@ export function Galeria({ imagens, retrato }: { imagens: { file_path: string }[]
       <Modal visible={aberta !== null} animationType="fade" statusBarTranslucent navigationBarTranslucent onRequestClose={fechar}>
         <View style={{ flex: 1, backgroundColor: '#000' }}>
           <FlatList
+            key={width} // recomeça alinhada quando a largura muda (abrir/fechar o Duo, rodar)
             horizontal
             pagingEnabled
             data={lista}
             keyExtractor={(i) => i.file_path}
-            initialScrollIndex={aberta ?? 0}
+            initialScrollIndex={actual}
             getItemLayout={(_, n) => ({ length: width, offset: width * n, index: n })}
             showsHorizontalScrollIndicator={false}
             onMomentumScrollEnd={(e) => setActual(Math.round(e.nativeEvent.contentOffset.x / width))}

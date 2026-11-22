@@ -77,11 +77,14 @@ export function Fila(p: { titulo: string; media?: Media; path?: string; params?:
 // Grelha vertical de 3 colunas; ao chegar perto do fim chama `onFim` e mostra um spinner enquanto vêm mais itens
 export function Grelha(p: { itens: any[]; media?: Media; cabecalho?: ReactElement; aCarregar?: boolean; erro?: boolean; repetir?: () => void; onFim?: () => void; legenda?: (x: any) => string }) {
   const { width } = useWindowDimensions();
-  const largura = (width - 16 * 2 - 10 * 2) / 3;
+  // 3 colunas num telemóvel normal; mais em ecrãs largos (iPhone Duo aberto, tablets, paisagem), com cartazes de ~125 pt
+  const colunas = Math.max(3, Math.floor((width - 16 * 2 + 10) / 125));
+  const largura = (width - 16 * 2 - 10 * (colunas - 1)) / colunas;
   return (
     <FlatList
       data={p.itens}
-      numColumns={3}
+      key={colunas} // a FlatList não aceita mudar o número de colunas (ao abrir/fechar o Duo ou rodar) sem ser recriada
+      numColumns={colunas}
       keyExtractor={(x, i) => `${x.id}-${i}`}
       renderItem={({ item }) => <Cartao item={item} media={p.media} largura={largura} legenda={p.legenda?.(item)} />}
       columnWrapperStyle={{ gap: 10, paddingHorizontal: 16 }}
@@ -101,12 +104,14 @@ export function Grelha(p: { itens: any[]; media?: Media; cabecalho?: ReactElemen
 // Destaque do topo: imagens grandes que passam para o lado; `ateAoTopo` estende a imagem por baixo da barra de estado
 export function Destaque({ path, params, media, ateAoTopo }: { path: string; params?: Params; media?: Media; ateAoTopo?: boolean }) {
   const { data } = useTmdb(path, params);
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const topo = useSafeAreaInsets().top;
-  const altura = Math.round(width * 0.62) + (ateAoTopo ? topo : 0);
+  // em ecrãs largos ou em paisagem a imagem não passa de 55% da altura, para o resto do ecrã continuar à vista
+  const altura = Math.round(Math.min(width * 0.62, height * 0.55)) + (ateAoTopo ? topo : 0);
   const itens = (data?.results ?? []).filter((x: any) => x.backdrop_path && (media || x.media_type === 'movie' || x.media_type === 'tv')).slice(0, 10);
   return (
     <FlatList
+      key={width} // recomeça alinhado quando a largura muda (abrir/fechar o Duo, rodar)
       horizontal
       pagingEnabled
       data={itens}
