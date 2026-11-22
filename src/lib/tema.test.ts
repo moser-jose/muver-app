@@ -27,11 +27,19 @@ test('um valor guardado inválido conta como automático', () => {
   expect(carregar().tema.temaGuardado()).toBe('auto');
 });
 
-test('mudarTema guarda e aplica a escolha', () => {
+test('mudarTema guarda a escolha mas deixa o sistema para depois de os ecrãs mudarem', () => {
   const { tema, aplicar } = carregar();
   tema.mudarTema('light');
   expect(kv.get('tema')).toBe('light');
-  expect(aplicar).toHaveBeenLastCalledWith('light');
+  expect(tema.temaGuardado()).toBe('light');
+  // se o sistema fosse avisado já aqui, a barra de abas mudava de cor antes do resto da app
+  expect(aplicar).not.toHaveBeenCalled();
+});
+
+test('aplicarTemaNoSistema passa a escolha ao sistema', () => {
+  const { tema, aplicar } = carregar();
+  tema.aplicarTemaNoSistema('dark');
+  expect(aplicar).toHaveBeenLastCalledWith('dark');
 });
 
 test('voltar a automático devolve o controlo ao telemóvel', () => {
@@ -39,5 +47,6 @@ test('voltar a automático devolve o controlo ao telemóvel', () => {
   const { tema, aplicar } = carregar();
   tema.mudarTema('auto');
   expect(tema.temaGuardado()).toBe('auto');
+  tema.aplicarTemaNoSistema('auto');
   expect(aplicar).toHaveBeenLastCalledWith('unspecified');
 });

@@ -3,17 +3,18 @@ import { ArrowRightUpIcon } from '@solar-icons/react-native/linear/arrow-right-u
 import { CodeSquareIcon } from '@solar-icons/react-native/linear/code-square';
 import { GlobalIcon } from '@solar-icons/react-native/linear/global';
 import { MoonIcon } from '@solar-icons/react-native/linear/moon';
+import { ShieldCheckIcon } from '@solar-icons/react-native/linear/shield-check';
 import { SmartphoneIcon } from '@solar-icons/react-native/linear/smartphone';
 import { SunIcon } from '@solar-icons/react-native/linear/sun';
 import Constants from 'expo-constants';
 import { Image } from 'expo-image';
-import { ComponentType, ReactNode, useState } from 'react';
+import { ComponentType, ReactNode } from 'react';
 import { Linking, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, Line, Path, Rect } from 'react-native-svg';
 
 import { Texto, TituloAba } from '@/components/base';
 import { mudarLingua, t, useLingua } from '@/lib/i18n';
-import { DESTAQUE, mudarTema, Tema, temaGuardado, useCores } from '@/lib/tema';
+import { DESTAQUE, mudarTema, Tema, useCores, useTema } from '@/lib/tema';
 
 type Icone = ComponentType<{ size?: number; color?: string }>;
 
@@ -82,7 +83,7 @@ const AUTOR: [string, string, Icone][] = [
 export default function Definicoes() {
   const c = useCores();
   const lingua = useLingua();
-  const [tema, setTema] = useState(temaGuardado);
+  const tema = useTema();
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ paddingBottom: 120 }}>
       <TituloAba>{t('ui.definicoes')}</TituloAba>
@@ -100,10 +101,7 @@ export default function Definicoes() {
             icone={icone}
             texto={t(chave)}
             activa={tema === valor}
-            onPress={() => {
-              setTema(valor);
-              mudarTema(valor);
-            }}
+            onPress={() => mudarTema(valor)}
           />
         ))}
       </Grupo>
@@ -118,6 +116,11 @@ export default function Definicoes() {
         </View>
         <Linha icone={GlobalIcon} texto="muver.moserjose.com" url="https://muver.moserjose.com/" />
         <Linha icone={CodeSquareIcon} texto={t('header.github')} detalhe={t('ui.rodape_contribua')} url="https://github.com/moser-jose/muver" />
+      </Grupo>
+
+      <Grupo titulo={t('ui.legal')}>
+        {/* a mesma página que está indicada na App Store e no Google Play */}
+        <Linha primeira icone={ShieldCheckIcon} texto={t('ui.privacidade')} detalhe={t('ui.privacidade_resumo')} url="https://muver.moserjose.com/privacidade" />
       </Grupo>
 
       {/* site e redes do autor, só em ícones */}
