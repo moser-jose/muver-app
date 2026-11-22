@@ -30,8 +30,20 @@
     "ios": {
       "bundleIdentifier": "com.moserjose.muver",
       "infoPlist": {
-        "UIViewControllerBasedStatusBarAppearance": true
+        "UIViewControllerBasedStatusBarAppearance": true,
+        "ITSAppUsesNonExemptEncryption": false
       }
-    }
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "979f0d80-b92a-452c-9be9-51e340583e92"
+      }
+    },
+    "owner": "mosmmy"
   }
 }
