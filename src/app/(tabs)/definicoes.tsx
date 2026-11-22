@@ -115,7 +115,6 @@ export default function Definicoes() {
           </View>
         </View>
         <Linha icone={GlobalIcon} texto="muver.moserjose.com" url="https://muver.moserjose.com/" />
-        <Linha icone={CodeSquareIcon} texto={t('header.github')} detalhe={t('ui.rodape_contribua')} url="https://github.com/moser-jose/muver" />
       </Grupo>
 
       <Grupo titulo={t('ui.legal')}>
