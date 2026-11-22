@@ -1,7 +1,8 @@
 import { NativeTabs } from 'expo-router/native-tabs';
+import { Platform } from 'react-native';
 
 import { t } from '@/lib/i18n';
-import { DESTAQUE } from '@/lib/tema';
+import { DESTAQUE, useCores } from '@/lib/tema';
 
 // As abas nativas só aceitam imagens: estes PNG são os ícones Solar (linear / bold) convertidos de SVG.
 // Para trocar um ícone é preciso gerar de novo os PNG em assets/images/tabs (1x, @2x, @3x).
@@ -14,8 +15,15 @@ const abas = () => [
 ] as const;
 
 export default function Abas() {
+  const c = useCores();
+  // No Android a barra recebe as cores do tema da app, para mudar no mesmo instante que os ecrãs
+  // (deixada ao sistema, ficava com as cores do tema anterior). No iOS fica com o vidro do sistema.
+  const cores =
+    Platform.OS === 'android'
+      ? { backgroundColor: c.superficie, indicatorColor: c.borda, iconColor: { default: c.mudo, selected: DESTAQUE }, labelStyle: { default: { color: c.mudo }, selected: { color: DESTAQUE } } }
+      : {};
   return (
-    <NativeTabs tintColor={DESTAQUE} labelVisibilityMode="labeled">
+    <NativeTabs tintColor={DESTAQUE} labelVisibilityMode="labeled" {...cores}>
       {abas().map(([name, titulo, contorno, cheio], i) => (
         // as três primeiras abas têm a imagem de destaque até ao topo do ecrã: sem isto, a barra de abas
         // nativa empurra o conteúdo para baixo da barra de estado, mesmo que o ecrã peça o contrário

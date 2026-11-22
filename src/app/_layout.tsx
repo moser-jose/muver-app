@@ -2,11 +2,11 @@ import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { Image } from 'expo-image';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { useColorScheme, View } from 'react-native';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { View } from 'react-native';
 
 import { useLingua } from '@/lib/i18n';
-import { DESTAQUE, useCores } from '@/lib/tema';
+import { aplicarTemaNoSistema, DESTAQUE, useClaro, useCores, useTema } from '@/lib/tema';
 
 // Ecrã de abertura dentro da app: o ícone do Muver, igual ao ecrã de abertura nativo (app.json),
 // para aparecer também no Expo Go, que não mostra o nativo
@@ -31,7 +31,10 @@ const EXPO_GO = Constants.executionEnvironment === ExecutionEnvironment.StoreCli
 export default function Layout() {
   const c = useCores();
   const lingua = useLingua();
-  const claro = useColorScheme() === 'light';
+  const claro = useClaro();
+  const tema = useTema();
+  // só depois de os ecrãs estarem redesenhados é que o sistema muda a barra de abas e os cabeçalhos
+  useLayoutEffect(() => aplicarTemaNoSistema(tema), [tema]);
   const base = claro ? DefaultTheme : DarkTheme;
   return (
     <ThemeProvider value={{ ...base, colors: { ...base.colors, primary: DESTAQUE, background: c.fundo, card: c.superficie, text: c.texto, border: c.borda } }}>

@@ -3,11 +3,14 @@ import { Appearance, Linking } from 'react-native';
 
 import Definicoes from '@/app/(tabs)/definicoes';
 import { lingua, mudarLingua } from '@/lib/i18n';
+import { mudarTema } from '@/lib/tema';
 
 jest.mock('expo-router', () => require('@/test/router'));
 
 const kv: Map<string, string> = (globalThis as any).__kv;
 beforeEach(() => {
+  jest.spyOn(Appearance, 'setColorScheme').mockImplementation(() => {});
+  mudarTema('auto');
   kv.clear();
   mudarLingua('pt');
 });
@@ -29,19 +32,17 @@ test('escolher English passa o ecrã para inglês e guarda a escolha', async () 
   expect(screen.getByRole('radio', { name: /English/, checked: true })).toBeTruthy();
 });
 
-test('escolher um tema aplica-o, guarda-o e marca a linha', async () => {
-  const aplicar = jest.spyOn(Appearance, 'setColorScheme').mockImplementation(() => {});
+test('escolher um tema guarda-o e marca a linha', async () => {
   await render(<Definicoes />);
   expect(screen.getByRole('radio', { name: 'Sistema', checked: true })).toBeTruthy();
   await fireEvent.press(screen.getByText('Escuro'));
-  expect(aplicar).toHaveBeenLastCalledWith('dark');
   expect(kv.get('tema')).toBe('dark');
   expect(screen.getByRole('radio', { name: 'Escuro', checked: true })).toBeTruthy();
   expect(screen.getByRole('radio', { name: 'Sistema', checked: false })).toBeTruthy();
 });
 
 test('abre com o tema que ficou guardado', async () => {
-  kv.set('tema', 'light');
+  mudarTema('light');
   await render(<Definicoes />);
   expect(screen.getByRole('radio', { name: 'Claro', checked: true })).toBeTruthy();
 });
@@ -57,4 +58,11 @@ test('os ícones do autor abrem o site, o LinkedIn e o Instagram', async () => {
     await fireEvent.press(screen.getByLabelText(`Moser José · ${nome}`));
     expect(abrir).toHaveBeenLastCalledWith(url);
   }
+});
+
+test('a política de privacidade abre a página pública do Muver', async () => {
+  const abrir = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined);
+  await render(<Definicoes />);
+  await fireEvent.press(screen.getByText('Política de Privacidade'));
+  expect(abrir).toHaveBeenLastCalledWith('https://muver.moserjose.com/privacidade');
 });
