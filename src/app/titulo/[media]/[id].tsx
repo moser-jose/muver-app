@@ -20,7 +20,7 @@ export default function Titulo() {
   const { media, id } = useLocalSearchParams<{ media: string; id: string }>();
   const tv = media === 'tv';
   const c = useCores();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const topo = useSafeAreaInsets().top;
   const { data, erro, repetir } = useTmdb(`/${tv ? 'tv' : 'movie'}/${id}`, {
     append_to_response: tv
@@ -54,7 +54,7 @@ export default function Titulo() {
       {/* o cabeçalho é transparente (ver _layout): a imagem sobe até ao topo e o botão de voltar fica por cima dela */}
       <Stack.Screen options={{ headerTintColor: f.backdrop_path ? '#fff' : c.texto }} />
       {f.backdrop_path ? (
-        <Image source={img(f.backdrop_path, 'w780')} style={{ width, height: Math.round((width * 9) / 16) + topo }} contentFit="cover" transition={200} />
+        <Image source={img(f.backdrop_path, 'w780')} style={{ width, height: Math.round(Math.min((width * 9) / 16, height * 0.55)) + topo }} contentFit="cover" transition={200} />
       ) : (
         <View style={{ height: topo + 56 }} />
       )}
